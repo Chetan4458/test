@@ -1,6 +1,3 @@
-url='https://www.google.com'
-def example_function():
-    print("This is a sample function")
 
 def another_function():
     for i in range(10)  # Missing colon
