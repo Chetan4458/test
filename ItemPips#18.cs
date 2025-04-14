@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Honeycomb.Data.Variables;
@@ -194,14 +195,15 @@ namespace DP.Bonus.Pips
             }
         }
 
-        public void PipsAward(long pipItemCount,NumberVariable awardCounter,long maxAwardCounter,List<SubItemPip> subPips, GameObjectVariable targetObject, Signal postPipAwarded)
+        public IEnumerator PipsAward(long pipItemCount,NumberVariable awardCounter,long maxAwardCounter,List<SubItemPip> subPips, GameObjectVariable targetObject, Signal postPipAwarded)
         {
             for (int i = (int)pipItemCount - 1; i >= 0; i--)
             {
-                awardCounter.Value += 1;
                 
                 subPips[i].PlayFlyAnimtion(awardCounter, (int)maxAwardCounter, targetObject.Value,
                    (float)timeToReachTarget.Value, (float)pipsPreFlightDelayTime.Value, postPipAwarded);
+
+                yield return new WaitForEndOfFrame();
 
                 if (awardCounter.Value >= maxAwardCounter)
                 {
@@ -210,24 +212,24 @@ namespace DP.Bonus.Pips
             }
         }
 
-        public void PipsGrandAwarded()
+        public IEnumerator PipsGrandAwarded()
         {
-            PipsAward(_grandCount, grandCounter, maxGrandCounter.Value, subGrandPips, targetGrandObject, grandAwardedOn);
+            return PipsAward(_grandCount, grandCounter, maxGrandCounter.Value, subGrandPips, targetGrandObject, grandAwardedOn);
         }
 
-        public void PipsMajorAwarded()
+        public IEnumerator PipsMajorAwarded()
         {
-            PipsAward(_majorCount, majorCounter, maxMajorCounter.Value,subMajorPips,targetMajorObject, majorAwardedOn);
+            return PipsAward(_majorCount, majorCounter, maxMajorCounter.Value, subMajorPips, targetMajorObject, majorAwardedOn);
         }
 
-        public void PipsMinorAwarded()
+        public IEnumerator PipsMinorAwarded()
         {
-            PipsAward(_minorCount, minorCounter, maxMinorCounter.Value,subMinorPips,targetMinorObject, minorAwardedOn);
+            return PipsAward(_minorCount, minorCounter, maxMinorCounter.Value, subMinorPips, targetMinorObject, minorAwardedOn);
         }
 
-        public void PipsMiniAwarded()
+        public IEnumerator PipsMiniAwarded()
         {
-            PipsAward(_miniCount, miniCounter, maxMiniCounter.Value, subMiniPips, targetMiniObject, miniAwardedOn);
+            return PipsAward(_miniCount, miniCounter, maxMiniCounter.Value, subMiniPips, targetMiniObject, miniAwardedOn);
         }
 
         public void HideSubPips()
